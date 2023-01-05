@@ -1,0 +1,7 @@
+/public/js
+/node_modules
+/target
+/.shadow-cljs
+/*.iml
+/.nrepl-port
+/.idea
