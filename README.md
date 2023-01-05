@@ -91,6 +91,8 @@ and push the updated code into your browser to be evaluated.
 
 Many options here - om, helix, preact, reagent
 
+Short discussion on why choose react here, i.e. Evaluation block from below, or just go with it and link to the evaluation later on?
+
 ### Reagent
 
 Add reagent to the `:dependencies` key in `shadow-cljs.edn`:
@@ -121,6 +123,8 @@ Now we can mount this component into the DOM:
 ### Evaluation
 - Very mature, defacto standard
 - Nice API
+- Reagent can be faster than React because of ClojureScript's immutable data structures - it's cheaper
+to detect if props have changed than Javascript's deep equality
 - No good support for hooks
 - Stuck on old react?
 
