@@ -57,12 +57,8 @@ npm install
 > with the commands that run them to show how it all fits together and what their jobs are?
 
 
-Then start the shadow-cljs server:
-```
-npx shadow-cljs server
-```
-
-You're now ready to build the app itself:
+You're now ready to start shadow-cljs, which will compile your code, push it into the browser and
+watch the filesystem for any changes you make:
 ```
 npx shadow-cljs watch app
 ```
@@ -72,7 +68,7 @@ You can open http://localhost:8020 in your browser to see the skeleton.
 ### REPL
 
 We can now start a REPL. As we're building a web page, it will be useful
-to use a browser to perform the evaluation in our REPL. It's easy to start one:
+to use a browser to perform the evaluation in our REPL. It's easy to start one; in a new terminal run:
 
 ```
 npx shadow-cljs cljs-repl app
@@ -99,33 +95,44 @@ How do we know it was evaluated in the browser? Try this:
 You should see an alert dialogue in your browser,
 as if you had typed `alert("Hello, world")` in the browser's developer console.
 
-Press `Ctrl+D` to exit the REPL.
+Press `Ctrl+D` when you want to exit the REPL.
 
 ### Building a page
 
-The source code is under `quickstart/src/main/starter/browser.cljs`.
+The source code generated from the quick start is under `quickstart/src/main/starter/browser.cljs`.
 
-Let's try pushing a dom element into the page:
+It contains some functions which are hooks to get you going with your development lifecycle:
+- `init` (called once when the page loads, which calls `start` as well)
+- `start` (called after new code has been loaded)
+- `stop` (called before new code is loaded)
 
-> Just push a textnode to make it more concise?
+Let's try pushing a dom element into the page.
+Add the following to the `start` function so it looks like this:
 
 ```
-// todo make this just use the text node for brevity?
-  (let [p (js/document.createElement "p")
-        text (js/document.createTextNode "Hello world")
-        app (js/document.getElementById "app")]
-    (.appendChild p text)
-    (.appendChild app p))
+(defn ^:dev/after-load start []
+  (.appendChild (js/document.getElementById "app")
+                (js/document.createTextNode "Hello, world")))
 ```
 
 When you save this source file with your changes, shadow-cljs will compile
 and push the updated code into your browser to be evaluated.
+You will see "Hello world" appear before your eyes!
 
 ## Rendering framework
 
-Many options here - om, helix, preact, reagent
+Our example above serves as a sighter to orient ourselves in our new surroundings.
+The browser, the DOM and Javascript are all there as before but we have now ascended to a higher plane,
+and our horizons have become broader.
 
-Short discussion on why choose react here, i.e. Evaluation block from below, or just go with it and link to the evaluation later on?
+[React](https://reactjs.org/) is a hugely popular library for rendering pages.
+Its functional, immutable approach is a natural fit for Clojure and there are several
+Clojure wrappers that provide a more idiomatic API[^1].
+
+A safe choice for us here is [reagent](https://github.com/reagent-project/reagent).
+One fun fact demonstrating the affinity between React and Clojure is that despite being a wrapper,
+Reagent can perform faster than plain React because Clojure's immutable data structures can be compared
+more efficiently than Javascript objects, resulting in faster decisions about when to re-render a component.
 
 ### Reagent
 
@@ -136,24 +143,27 @@ Add reagent to the `:dependencies` key in `shadow-cljs.edn`:
  [[reagent "1.1.1"]]
 ```
 
-Restart the shadow-cljs server you started with `npx shadow-cljs server` and the shadow-cljs compiler with ``
+> Do we need to restart anything or will it work like magic? Test this
 
-We can now write a reagent component:
-
-> talk about hiccup syntax
+We can now write our first reagent component. It takes the form of a simple Clojure function
+that returns a Clojure data structure representing HTML known as [Hiccup](https://github.com/weavejester/hiccup)
+after the library that popularised the format. It is much more concise than HTML and plays much more
+nicely with a structural code editor (e.g. paredit in emacs).
 
 ```
 (defn- hello-world []
   [:ul
    [:li "Hello"]
-   [:li "World!"]])
+   [:li {:style {:color "red"}} "World!"]])
 ```
 
-And then mount this component into the DOM:
+And then mount this component into the DOM by changing the `start` function to look like this:
 ```
 (defn ^:dev/after-load start []
   (rd/render [hello-world] (js/document.getElementById "app")))
 ```
+
+You will now
 
 ### Evaluation of reagent
 
@@ -182,3 +192,7 @@ to detect if props have changed than Javascript's deep equality
   - Unit - built in page in shadow
   - webdriver stuff
   - devcards + kamera
+
+## Footnotes
+[^1] Other wrappers for React include [helix](https://github.com/lilactown/helix),
+[rum](https://github.com/tonsky/rum) and [uix](https://github.com/roman01la/uix)
