@@ -194,5 +194,5 @@ to detect if props have changed than Javascript's deep equality
   - devcards + kamera
 
 ## Footnotes
-[^1] Other wrappers for React include [helix](https://github.com/lilactown/helix),
-[rum](https://github.com/tonsky/rum) and [uix](https://github.com/roman01la/uix)
+[^1]: Other wrappers for React include [helix](https://github.com/lilactown/helix),
+  [rum](https://github.com/tonsky/rum) and [uix](https://github.com/roman01la/uix)
