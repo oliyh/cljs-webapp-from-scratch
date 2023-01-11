@@ -190,7 +190,7 @@ cljs.user=> (+ 1 1)
 2
 ```
 
-Without further delay, let's start a REPL so we can experience the mind-blowing thrill of
+Without further delay, let's start a REPL so you too can experience the mind-blowing thrill of
 adding one number to another. As we're building a web page, it will be useful
 to use a browser to perform the evaluation in our REPL. It's easy to start one; in a new terminal run:
 
