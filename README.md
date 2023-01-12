@@ -274,10 +274,18 @@ You will notice that `hello-world` also includes our `new-item` component as a c
 This now renders as below, and when we type a new item into the input and press enter, it joins the list!
 ![shadow-cljs processes](/interaction.gif?raw=true)
 
+> Todo: mention re-frame and competitors for more advanced state management
+> Todo: mention new react state stuff?
+
+## Conclusion
+
+> What have we learned?
+> How to progress from here
+> Include links for other libraries that might be useful?
 
 ### Evaluation of reagent
 
-> Is this an appendix?
+> Is this an appendix? Probably out of scope for this article
 
 - Very mature, defacto standard
 - Nice API
@@ -303,6 +311,5 @@ to detect if props have changed than Javascript's deep equality
   - webdriver stuff
   - devcards + kamera
 
-## Footnotes
 [^1]: [Official Clojure guide](https://clojure.org/guides/learn/syntax), [Eric Normand's collection of learning resources](https://ericnormand.me/mini-guide/the-ultimate-guide-to-learning-clojure-for-free)
 [^2]: Other wrappers for React include [helix](https://github.com/lilactown/helix), [rum](https://github.com/tonsky/rum) and [uix](https://github.com/roman01la/uix)
