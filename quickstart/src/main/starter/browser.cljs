@@ -2,10 +2,22 @@
   (:require [reagent.core :as r]
             [reagent.dom :as rd]))
 
+(defonce state (r/atom {:items ["Hello" "World!"]}))
+
+(defn- new-item []
+  [:input
+   {:type "text"
+    :placeholder "Enter a new item"
+    :on-key-down (fn [e]
+                   (when (= "Enter" (.-key e))
+                     (swap! state update :items conj (.. e -target -value))))}])
+
 (defn- hello-world []
-  [:ul
-   [:li "Hello"]
-   [:li "World!"]])
+  [:div
+   [new-item]
+   [:ul (map (fn [item]
+               [:li {:key item} item])
+             (:items @state))]])
 
 ;; start is called by init and after code reloading finishes
 (defn ^:dev/after-load start []

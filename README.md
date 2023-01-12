@@ -74,10 +74,6 @@ cd quickstart
 npm install
 ```
 
-> How about an SVG diagram here with the server, app build, REPL and browser all arranged
-> with the commands that run them to show how it all fits together and what their jobs are?
-
-
 You're now ready to start shadow-cljs, which will compile your code, serve it to the browser and
 watch the filesystem for any changes you make:
 ```
@@ -85,6 +81,9 @@ npx shadow-cljs watch app
 ```
 
 You can open http://localhost:8020 in your browser to see the skeleton.
+
+The following diagram should help you understand what's going on here:
+![shadow-cljs processes](/shadow-cljs.png?raw=true)
 
 ### Building a page
 
@@ -217,6 +216,64 @@ Pro tip: press `Ctrl+D` when you want to exit the REPL.
 Let us now use this tool to help with implementing an interactive state in our app.
 
 #### Atoms
+
+You may be wondering how we are going to implement mutable state when Clojure's data structures are immutable.
+Clojure is a pragmatic language, so there are actually mutable constructs in it, but they are carefully marked
+so it's clear that you are dealing with something special.
+
+An atom is a mutable reference to an immutable value. The reference can be mutated using `swap!` or `reset!`
+(the `!` being conventional notation for a mutation) and the atom can be dereferenced to get the value using `@` or `deref`:
+
+```clj
+(def counter (atom 0))
+
+@counter ;; => 0
+
+(swap! counter inc)
+@counter ;; => 1
+```
+
+We are going to use an atom in our application to store some state, but we are going to use reagent's version of an atom.
+It has the same interface as Clojure's atom, but it has a secret superpower - when it changes, it can tell React to re-draw the DOM.
+
+We need the reagent core namespace:
+```clj
+(ns starter.browser
+  (:require [reagent.core :as r]
+            [reagent.dom :as rd]))
+```
+
+And we can create an initial state:
+```clj
+(defonce state (r/atom {:items ["Hello" "World!"]}))
+```
+
+We can write a new component with an input box to allow us to add items into the state:
+```clj
+(defn- new-item []
+  [:input
+   {:type "text"
+    :placeholder "Enter a new item"
+    :on-key-down (fn [e]
+                   (when (= "Enter" (.-key e))
+                     (swap! state update :items conj (.. e -target -value))))}])
+```
+
+And finally change our `hello-world` component to list out the items from the state:
+```clj
+(defn- hello-world []
+  [:div
+   [new-item]
+   [:ul (map (fn [item]
+               [:li {:key item} item])
+             (:items @state))]])
+```
+
+You will notice that `hello-world` also includes our `new-item` component as a child.
+
+This now renders as below, and when we type a new item into the input and press enter, it joins the list!
+![shadow-cljs processes](/interaction.webm?raw=true)
+
 
 ### Evaluation of reagent
 
