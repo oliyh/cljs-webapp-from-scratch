@@ -272,7 +272,7 @@ And finally change our `hello-world` component to list out the items from the st
 You will notice that `hello-world` also includes our `new-item` component as a child.
 
 This now renders as below, and when we type a new item into the input and press enter, it joins the list!
-![shadow-cljs processes](/interaction.webm.mp4)
+![shadow-cljs processes](/interaction.gif?raw=true)
 
 
 ### Evaluation of reagent
