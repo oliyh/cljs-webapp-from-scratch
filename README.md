@@ -10,6 +10,31 @@ In this article we will cover some of the reasons why ClojureScript is a natural
 particularly with React via a library called Reagent. We'll use a build tool called shadow-cljs and write
 a basic interactive web application.
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [cljs-webapp-from-scratch](#cljs-webapp-from-scratch)
+    - [Why ClojureScript?](#why-clojurescript)
+    - [Build tool](#build-tool)
+    - [shadow-cljs quickstart](#shadow-cljs-quickstart)
+    - [Iterative development](#iterative-development)
+    - [Rendering framework](#rendering-framework)
+        - [Reagent](#reagent)
+    - [Interactivity](#interactivity)
+        - [REPL](#repl)
+        - [Atoms](#atoms)
+    - [Where next?](#where-next)
+    - [Conclusion](#conclusion)
+    - [More ideas](#more-ideas)
+        - [Evaluation of reagent](#evaluation-of-reagent)
+        - [State management](#state-management)
+        - [Beyond](#beyond)
+- [Footnotes](#footnotes)
+    - [^2](#2)
+
+<!-- markdown-toc end -->
+
+
 ## Why ClojureScript?
 
 Clojure has compelling reasons to choose it for any kind of development, on both the server and the front end.
@@ -318,6 +343,8 @@ the transition easier.
 The code in this article can be found in full [here](https://github.com/oliyh/cljs-webapp-from-scratch).
 
 
+## More ideas
+
 > More ideas - appendices? Probably out of scope for this article, maybe future articles
 
 ### Evaluation of reagent
@@ -329,12 +356,12 @@ to detect if props have changed than Javascript's deep equality
 - No good support for hooks
 - Stuck on old react?
 
-## State management
+### State management
 - Local ratoms
 - re-frame for next level
 - React state stuff - not available yet with reagent?
 
-## Beyond
+### Beyond
 
 - Advanced build for deployment
 - Building a multi-page app
