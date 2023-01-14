@@ -60,7 +60,7 @@ incremental compilation as you develop, launching REPLs, running tests and brows
 In this article we shall be using shadow-cljs, which has had the most recent development, enjoys community funding
 and has the best support for using libraries from NPM - in other words, arguably the most solid choice today.
 
-### shadow-cljs quickstart
+## shadow-cljs quickstart
 
 Yet another excellent reason to choose shadow-cljs is the comprehensive documentation.
 Among these is the [browser quick start](https://github.com/shadow-cljs/quickstart-browser) which gets you to
@@ -85,7 +85,7 @@ You can open http://localhost:8020 in your browser to see the skeleton.
 The following diagram should help you understand what's going on here:
 ![shadow-cljs processes](/shadow-cljs.png?raw=true)
 
-### Building a page
+## Iterative development
 
 The source code generated from the quick start is under `quickstart/src/main/starter/browser.cljs`.
 
@@ -106,6 +106,9 @@ Add the following to the `start` function so it looks like this:
 When you save this source file with your changes, shadow-cljs will compile
 and push the updated code into your browser to be evaluated.
 You will see "Hello, world" appear before your eyes!
+
+This hot-reload functionality, together with shadow-cljs' fast compilation speed and
+(as we will cover later on) the REPL can really improve your development speed.
 
 ## Rendering framework
 
@@ -171,13 +174,13 @@ And then use it to mount our component into the DOM by changing the `start` func
 Once you have saved the file this list should now be rendered in your browser.
 We now have the rendering basics
 
-### Interactivity
+## Interactivity
 
 Things start to get interesting when we decide to add some interactivity. After all, if your page
 is static then you don't need Javascript at all. Before we implement anything, however, I'd like
 to introduce you to one of Clojure's superpowers: the REPL.
 
-#### REPL
+### REPL
 
 The REPL is a prompt where you can evaluate Clojure expressions. This is a powerful tool
 which helps you explore and trial solutions, reducing your feedback loop and making you more productive.
@@ -215,14 +218,17 @@ Pro tip: press `Ctrl+D` when you want to exit the REPL.
 
 Let us now use this tool to help with implementing an interactive state in our app.
 
-#### Atoms
+### Atoms
 
-You may be wondering how we are going to implement mutable state when Clojure's data structures are immutable.
-Clojure is a pragmatic language, so there are actually mutable constructs in it, but they are carefully marked
-so it's clear that you are dealing with something special.
+You may be wondering how we are going to implement mutable state when Clojure's data structures are immutable!
+Clojure is a pragmatic language so there are actually mutable constructs in it, but they are carefully marked
+so it's clear where you are dealing with something special.
 
-An atom is a mutable reference to an immutable value. The reference can be mutated using `swap!` or `reset!`
-(the `!` being conventional notation for a mutation) and the atom can be dereferenced to get the value using `@` or `deref`:
+An atom is a mutable reference to an immutable value. You can construct one with `(atom nil)`.
+The reference can be mutated using `swap!` or `reset!` (the `!` being conventional notation for a mutation)
+and the atom can be dereferenced to get the value using `@` or `deref`.
+
+Try this in your REPL:
 
 ```clj
 (def counter (atom 0))
@@ -274,18 +280,47 @@ You will notice that `hello-world` also includes our `new-item` component as a c
 This now renders as below, and when we type a new item into the input and press enter, it joins the list!
 ![shadow-cljs processes](/interaction.gif?raw=true)
 
-> Todo: mention re-frame and competitors for more advanced state management
-> Todo: mention new react state stuff?
+What is also neat is that you can use your REPL to inspect this atom:
+```clj
+(in-ns 'starter.browser)
+
+@state ;; => {:items ["Hello", "World!"]}
+```
+
+And you can mutate it, too, with the new state being immediately rendered in your browser!
+```clj
+(swap! state update :items conj "Hello REPL!")
+```
+
+This is just a glimpse of the utility of the REPL when developing an application. It's a constant companion,
+blending code, data and state, allowing you to inspect everything with the full power of the language.
+
+## Where next?
+
+If you are interested in using this base to work towards an actual application, I would suggest the excellent
+[Reagent cookbook](https://github.com/reagent-project/reagent-cookbook) for examples of how to implement
+particular features. If your application is significantly interactive and you have a lot of state to model,
+I would also recommend looking at [re-frame](https://github.com/day8/re-frame), an analogue of redux,
+to bring structure and order to your state management.
 
 ## Conclusion
 
-> What have we learned?
-> How to progress from here
-> Include links for other libraries that might be useful?
+We've covered a lot of ground here - Clojure itself, the shadow-cljs build tool, the reagent rendering library,
+the REPL and building interactivity using atoms. In each case we've really only scratched the surface; any of these topics
+has a wealth of resources for diving deeper.
+
+I hope you find the simplicity and conciseness of Clojure appealing - I find this to be one of its enduring
+qualities that I appreciate every time I see another language. I will admit, it took me several weeks to start
+thinking in the right way to work harmoniously in Clojure, but that was coming from an imperative Java background a decade ago.
+Many languages today have adopted functional paradigms and offer immutable data structures which should make
+the transition easier.
+
+The code in this article can be found in full [here](https://github.com/oliyh/cljs-webapp-from-scratch).
+
+
+> More ideas - appendices? Probably out of scope for this article, maybe future articles
 
 ### Evaluation of reagent
-
-> Is this an appendix? Probably out of scope for this article
 
 - Very mature, defacto standard
 - Nice API
@@ -296,12 +331,10 @@ to detect if props have changed than Javascript's deep equality
 
 ## State management
 - Local ratoms
-- React state stuff - not available yet with reagent?
 - re-frame for next level
+- React state stuff - not available yet with reagent?
 
 ## Beyond
-
-> Are these further articles, will they make it too long?
 
 - Advanced build for deployment
 - Building a multi-page app
